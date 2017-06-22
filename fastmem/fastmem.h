@@ -44,7 +44,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 256;
 		}
@@ -56,7 +56,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 128;
 		}
@@ -67,7 +67,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 64;
 		}
@@ -78,7 +78,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8 __msz8 __msz8 __msz8
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 32;
 		}
@@ -89,7 +89,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8 __msz8
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 16;
 		}
@@ -100,7 +100,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 8;
 		}
@@ -111,7 +111,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz1 __msz1 __msz1 __msz1
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 4;
 		}
@@ -122,7 +122,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz1 __msz1
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 2;
 		}
@@ -133,7 +133,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz1
 			: "=x" (p)
 			: "x" (p)
-			: // no clobbers
+			: "memory"
 			);
 			n -= 1;
 		}
@@ -151,7 +151,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 256;
 	}
@@ -163,7 +163,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 128;
 	}
@@ -174,7 +174,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 64;
 	}
@@ -185,7 +185,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8 __ms8 __ms8 __ms8
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 32;
 	}
@@ -196,7 +196,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8 __ms8
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 16;
 	}
@@ -207,7 +207,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 8;
 	}
@@ -218,7 +218,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms1 __ms1 __ms1 __ms1
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 4;
 	}
@@ -229,7 +229,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms1 __ms1
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 2;
 	}
@@ -240,7 +240,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms1
 		: "=x" (p)
 		: "x" (p), [cb] "r" (c & 0xFF)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 1;
 	}
@@ -274,7 +274,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 256;
 	}
@@ -286,7 +286,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 128;
 	}
@@ -297,7 +297,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 64;
 	}
@@ -308,7 +308,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8 __cp8 __cp8 __cp8
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 32;
 	}
@@ -319,7 +319,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8 __cp8
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 16;
 	}
@@ -330,7 +330,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 8;
 	}
@@ -341,7 +341,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp1 __cp1 __cp1 __cp1
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 4;
 	}
@@ -352,7 +352,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp1 __cp1
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 2;
 	}
@@ -363,7 +363,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp1
 		: "=x" (pd), "=z" (ps)
 		: "x" (pd), "z" (ps)
-		: // no clobbers
+		: "memory"
 		);
 		n -= 1;
 	}
