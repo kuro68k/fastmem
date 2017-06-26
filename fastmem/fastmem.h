@@ -28,10 +28,18 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 
 	void *p = str;
 
-#define __ms1		"st		X+, %[cb]"	"\n\t"
+	typedef struct {
+		char b[n];
+	} block_t;
+
+	block_t *blk_p = (block_t *)str;
+
+
+#define __ms1		"st		%a[ptr]+, %[cb]"		"\n\t"
 #define __ms8		__ms1 __ms1 __ms1 __ms1 __ms1 __ms1 __ms1 __ms1
-#define __msz1		"st		X+, __zero_reg__"	"\n\t"
+#define __msz1		"st		%a[ptr]+, __zero_reg__"	"\n\t"
 #define __msz8		__msz1 __msz1 __msz1 __msz1 __msz1 __msz1 __msz1 __msz1
+
 
 	if (c == 0)
 	{
@@ -42,9 +50,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 256;
 		}
@@ -54,9 +60,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			asm volatile(
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 128;
 		}
@@ -65,9 +69,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 64;
 		}
@@ -76,9 +78,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz8 __msz8 __msz8 __msz8
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 32;
 		}
@@ -87,9 +87,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz8 __msz8
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 16;
 		}
@@ -98,9 +96,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz8
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 8;
 		}
@@ -109,9 +105,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz1 __msz1 __msz1 __msz1
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 4;
 		}
@@ -120,9 +114,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz1 __msz1
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 2;
 		}
@@ -131,9 +123,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		{
 			asm volatile(
 				__msz1
-			: "=x" (p)
-			: "x" (p)
-			: "memory"
+			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 1;
 		}
@@ -149,9 +139,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 256;
 	}
@@ -161,9 +150,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		asm volatile(
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 128;
 	}
@@ -172,9 +160,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 64;
 	}
@@ -183,9 +170,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms8 __ms8 __ms8 __ms8
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 32;
 	}
@@ -194,9 +180,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms8 __ms8
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 16;
 	}
@@ -205,9 +190,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms8
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 8;
 	}
@@ -216,9 +200,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms1 __ms1 __ms1 __ms1
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 4;
 	}
@@ -227,9 +210,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms1 __ms1
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 2;
 	}
@@ -238,9 +220,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	{
 		asm volatile(
 			__ms1
-		: "=x" (p)
-		: "x" (p), [cb] "r" (c & 0xFF)
-		: "memory"
+		: [ptr] "+e" (p), "=m" (*blk_p)
+		: [cb] "r" ((unsigned char)c)
 		);
 		n -= 1;
 	}
@@ -261,9 +242,17 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	void *pd = dest;
 	void *ps = src;
 
-#define __cp1		"ld		__tmp_reg__, Z+"	"\n\t" \
-					"st		X+, __tmp_reg__"	"\n\t"
+	typedef struct {
+		char b[n];
+	} block_t;
+
+	block_t *blk_p = (block_t *)dest;
+
+
+#define __cp1		"ld		__tmp_reg__, %a[src]+"	"\n\t" \
+					"st		%a[dst]+, __tmp_reg__"	"\n\t"
 #define __cp8		__cp1 __cp1 __cp1 __cp1 __cp1 __cp1 __cp1 __cp1
+
 
 	if (n >= 256)
 	{
@@ -272,9 +261,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 256;
 	}
@@ -284,9 +271,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 		asm volatile(
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 128;
 	}
@@ -295,9 +280,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 64;
 	}
@@ -306,9 +289,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp8 __cp8 __cp8 __cp8
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 32;
 	}
@@ -317,9 +298,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp8 __cp8
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 16;
 	}
@@ -328,9 +307,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp8
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 8;
 	}
@@ -339,9 +316,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp1 __cp1 __cp1 __cp1
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 4;
 	}
@@ -350,9 +325,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp1 __cp1
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 2;
 	}
@@ -361,9 +334,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	{
 		asm volatile(
 			__cp1
-		: "=x" (pd), "=z" (ps)
-		: "x" (pd), "z" (ps)
-		: "memory"
+		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 1;
 	}
