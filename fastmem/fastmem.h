@@ -35,10 +35,10 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	block_t *blk_p = (block_t *)str;
 
 
-#define __ms1		"st		%a[ptr]+, %[cb]"		"\n\t"
-#define __ms8		__ms1 __ms1 __ms1 __ms1 __ms1 __ms1 __ms1 __ms1
-#define __msz1		"st		%a[ptr]+, __zero_reg__"	"\n\t"
-#define __msz8		__msz1 __msz1 __msz1 __msz1 __msz1 __msz1 __msz1 __msz1
+#define fm_ms1		"st		%a[ptr]+, %[cb]"		"\n\t"
+#define fm_ms8		fm_ms1 fm_ms1 fm_ms1 fm_ms1 fm_ms1 fm_ms1 fm_ms1 fm_ms1
+#define fm_msz1		"st		%a[ptr]+, __zero_reg__"	"\n\t"
+#define fm_msz8		fm_msz1 fm_msz1 fm_msz1 fm_msz1 fm_msz1 fm_msz1 fm_msz1 fm_msz1
 
 
 	if (c == 0)
@@ -46,10 +46,10 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 256)
 		{
 			asm volatile(
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 256;
@@ -58,8 +58,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 128)
 		{
 			asm volatile(
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 128;
@@ -68,7 +68,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 64)
 		{
 			asm volatile(
-				__msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8 __msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8 fm_msz8
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 64;
@@ -77,7 +77,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 32)
 		{
 			asm volatile(
-				__msz8 __msz8 __msz8 __msz8
+				fm_msz8 fm_msz8 fm_msz8 fm_msz8
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 32;
@@ -86,7 +86,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 16)
 		{
 			asm volatile(
-				__msz8 __msz8
+				fm_msz8 fm_msz8
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 16;
@@ -95,7 +95,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 8)
 		{
 			asm volatile(
-				__msz8
+				fm_msz8
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 8;
@@ -104,7 +104,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 4)
 		{
 			asm volatile(
-				__msz1 __msz1 __msz1 __msz1
+				fm_msz1 fm_msz1 fm_msz1 fm_msz1
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 4;
@@ -113,7 +113,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 2)
 		{
 			asm volatile(
-				__msz1 __msz1
+				fm_msz1 fm_msz1
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 2;
@@ -122,7 +122,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 		if (n >= 1)
 		{
 			asm volatile(
-				__msz1
+				fm_msz1
 			: [ptr] "+e" (p), "=m" (*blk_p)
 			);
 			n -= 1;
@@ -135,10 +135,10 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 256)
 	{
 		asm volatile(
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -148,8 +148,8 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 128)
 	{
 		asm volatile(
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -159,7 +159,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 64)
 	{
 		asm volatile(
-			__ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8 __ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8 fm_ms8
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -169,7 +169,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 32)
 	{
 		asm volatile(
-			__ms8 __ms8 __ms8 __ms8
+			fm_ms8 fm_ms8 fm_ms8 fm_ms8
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -179,7 +179,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 16)
 	{
 		asm volatile(
-			__ms8 __ms8
+			fm_ms8 fm_ms8
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -189,7 +189,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 8)
 	{
 		asm volatile(
-			__ms8
+			fm_ms8
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -199,7 +199,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 4)
 	{
 		asm volatile(
-			__ms1 __ms1 __ms1 __ms1
+			fm_ms1 fm_ms1 fm_ms1 fm_ms1
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -209,7 +209,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 2)
 	{
 		asm volatile(
-			__ms1 __ms1
+			fm_ms1 fm_ms1
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -219,7 +219,7 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 	if (n >= 1)
 	{
 		asm volatile(
-			__ms1
+			fm_ms1
 		: [ptr] "+e" (p), "=m" (*blk_p)
 		: [cb] "r" ((unsigned char)c)
 		);
@@ -228,19 +228,19 @@ static inline void * fmemset(void *str, uint16_t c, size_t n)
 
 	return str;
 
-#undef __ms1
-#undef __ms8
-#undef __msz1
-#undef __msz8
+#undef fm_ms1
+#undef fm_ms8
+#undef fm_msz1
+#undef fm_msz8
 }
 
-static inline void * fmemcpy(void *dest, void *src, size_t n)
+static inline void * fmemcpy(void *dest, const void *src, size_t n)
 {
 	if (n > MAX_UNROLL)
 		return memcpy(dest, src, n);
 
 	void *pd = dest;
-	void *ps = src;
+	void *ps = (void *)src;
 
 	typedef struct {
 		char b[n];
@@ -249,18 +249,18 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	block_t *blk_p = (block_t *)dest;
 
 
-#define __cp1		"ld		__tmp_reg__, %a[src]+"	"\n\t" \
+#define fm_cp1		"ld		__tmp_reg__, %a[src]+"	"\n\t" \
 					"st		%a[dst]+, __tmp_reg__"	"\n\t"
-#define __cp8		__cp1 __cp1 __cp1 __cp1 __cp1 __cp1 __cp1 __cp1
+#define fm_cp8		fm_cp1 fm_cp1 fm_cp1 fm_cp1 fm_cp1 fm_cp1 fm_cp1 fm_cp1
 
 
 	if (n >= 256)
 	{
 		asm volatile(
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 256;
@@ -269,8 +269,8 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 128)
 	{
 		asm volatile(
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 128;
@@ -279,7 +279,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 64)
 	{
 		asm volatile(
-			__cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8 __cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8 fm_cp8
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 64;
@@ -288,7 +288,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 32)
 	{
 		asm volatile(
-			__cp8 __cp8 __cp8 __cp8
+			fm_cp8 fm_cp8 fm_cp8 fm_cp8
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 32;
@@ -297,7 +297,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 16)
 	{
 		asm volatile(
-			__cp8 __cp8
+			fm_cp8 fm_cp8
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 16;
@@ -306,7 +306,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 8)
 	{
 		asm volatile(
-			__cp8
+			fm_cp8
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 8;
@@ -315,7 +315,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 4)
 	{
 		asm volatile(
-			__cp1 __cp1 __cp1 __cp1
+			fm_cp1 fm_cp1 fm_cp1 fm_cp1
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 4;
@@ -324,7 +324,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 2)
 	{
 		asm volatile(
-			__cp1 __cp1
+			fm_cp1 fm_cp1
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 2;
@@ -333,7 +333,7 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 	if (n >= 1)
 	{
 		asm volatile(
-			__cp1
+			fm_cp1
 		: [src] "+e" (ps), [dst] "+e" (pd), "=m" (*blk_p)
 		);
 		n -= 1;
@@ -341,8 +341,8 @@ static inline void * fmemcpy(void *dest, void *src, size_t n)
 
 	return dest;
 
-#undef __cp1
-#undef __cp8
+#undef fm_cp1
+#undef fm_cp8
 }
 
 
